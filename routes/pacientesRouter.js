@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { crearPaciente, consultarHistoria } = require('../controllers/controller-pacientes');
+const { crearPaciente, consultarHistoria, crearRegistroPaciente } = require('../controllers/controller-pacientes');
 
 router.post('/', async (req, res) => {
   try {
@@ -22,9 +22,8 @@ router.get('/historia', async (req, res) => {
 
 router.post('/registro', async (req, res) => {
   try {
-    // const response = await controller()
-    const { ci } = req.body;
-    res.status(301).send({ result: "Endpoint para agregar un registro al paciente " + ci });
+    const response = await crearRegistroPaciente(req.body)
+    res.status(response.status).send(response.data);
   } catch (err) {
     res.send(err);
   }
