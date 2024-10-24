@@ -1,8 +1,7 @@
-const { ciAlreadyExists, createPatient } = require('../services/pacientes');
+const { ciAlreadyExists, createPatient, createPatientRegistry } = require('../services/pacientes');
 
 async function crearPaciente(datos) {
   const { nombre, apellido, ci, fecha_nacimiento, sexo, telefono, direccion, email } = datos;
-
   try {
     const existsCi = await ciAlreadyExists(ci);
 
@@ -29,5 +28,33 @@ async function consultarHistoria(datos) {
     };
 }
 
+async function crearRegistroPaciente(datos) {
+  const {
+    ci,
+    fecha,
+    tipo,
+    diagnostico,
+    medico,
+    institucion,
+    descripcion,
+    medicacion
+  } = datos;
 
-module.exports = { crearPaciente, consultarHistoria };
+  try{ 
+    const existsCi = await ciAlreadyExists(ci);
+    if (!existsCi) throw { message: "No existe un paciente con esta cedula", status: 402 };
+    return createPatientRegistry(ci, fecha, tipo, diagnostico, medico, institucion, descripcion, medicacion);
+    
+  } catch(error) {
+    console.error('Error al crear el registro:', error);
+    return {
+      data: {
+        error: error.message,
+      },
+      status: error.status,
+    };
+  }
+}
+
+
+module.exports = { crearPaciente, consultarHistoria, crearRegistroPaciente };
