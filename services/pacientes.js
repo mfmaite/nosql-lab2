@@ -17,7 +17,7 @@ async function ciAlreadyExists(ci) {
 
 async function createPatient(nombre, apellido, ci, fecha_nacimiento, sexo, telefono, direccion, email) {
   try {
-    const pacientesRef = push(ref(firebaseClient, BD_REFERENCES.pacientes));
+    const pacientesRef = await push(ref(firebaseClient, BD_REFERENCES.pacientes));
 
     await set(pacientesRef, {
       nombre,
@@ -49,4 +49,39 @@ async function createPatient(nombre, apellido, ci, fecha_nacimiento, sexo, telef
   }
 }
 
-export { ciAlreadyExists, createPatient };
+async function createPatientRegistry(ci, fecha, tipo, diagnostico, medico, institucion, descripcion, medicacion) {
+  try {
+    const registroRef = await push(ref(firebaseClient, BD_REFERENCES.registro));
+
+    await set(registroRef, {
+      ci,
+      fecha,
+      tipo,
+      diagnostico,
+      medico,
+      institucion,
+      descripcion,
+      medicacion
+    });
+
+    return {
+      data: {
+        message: 'Registro creado exitosamente',
+        registroId: registroRef.key
+      },
+      status: 200
+    };
+
+  } catch (error) {
+    console.error('Error al crear el registro:', error);
+    return {
+      data: {
+        message: 'Hubo un error al crear el registro',
+        error: error.message
+      },
+      status: 500
+    };
+  }
+
+}
+export { ciAlreadyExists, createPatient, createPatientRegistry };

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { crearPaciente, consultarHistoria } from '../controllers/controller-pacientes.js';
+import { crearPaciente, consultarHistoria, crearRegistroPaciente } from '../controllers/controller-pacientes.js';
 
 const router = Router();
 
@@ -23,9 +23,8 @@ router.get('/historia', async (req, res) => {
 
 router.post('/registro', async (req, res) => {
   try {
-    // const response = await controller()
-    const { ci } = req.body;
-    res.status(301).send({ result: "Endpoint para agregar un registro al paciente " + ci });
+    const response = await crearRegistroPaciente(req.body)
+    res.status(response.status).send(response.data);
   } catch (err) {
     res.send(err);
   }
