@@ -1,7 +1,7 @@
 import { Paciente } from '../types/paciente';
-import { Registro } from '../types/registro';
-import { ApiError, errors } from '../utils/apiError';
-import { ciAlreadyExists, createPatient, createPatientRegistry } from '../services/pacientes';
+import { ApiError, errors } from '../utils';
+import { crearRegistroData } from '../schema/registro.schema';
+import { ciAlreadyExists, createPatient, createPatientRegistry } from '../services';
 
 async function crearPaciente(paciente: Paciente) {
   try {
@@ -22,11 +22,11 @@ async function crearPaciente(paciente: Paciente) {
   }
 }
 
-async function crearRegistroPaciente(registro: Registro) {
+async function crearRegistroPaciente(registro: crearRegistroData) {
   try {
     const existsCi = await ciAlreadyExists(registro.ci);
     if (!existsCi) throw new ApiError(errors.CI_NOT_FOUND);
-    return createPatientRegistry(registro);
+    return createPatientRegistry({ ...registro, createdAt: new Date().toString() });
 
   } catch (error) {
     const err = error as ApiError;

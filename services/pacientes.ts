@@ -2,10 +2,8 @@ import { Paciente } from '../types/paciente';
 import { Registro } from '../types/registro';
 import firebaseClient from '../config/firebase';
 import BD_REFERENCES from '../networking/references';
-import { ApiError, errors } from '../utils/apiError';
-import { validateInput } from '../utils/validateInput';
-import { pacienteSchema } from '../schema/paciente.schema';
-import { registroSchema } from '../schema/registro.schema';
+import { ApiError, errors, validateInput } from '../utils';
+import { pacienteSchema, registroSchema } from '../schema';
 import { ref, get, query, orderByChild, equalTo, push, set } from 'firebase/database';
 
 
@@ -89,20 +87,4 @@ async function createPatientRegistry(registro: Registro) {
 
 }
 
-async function getHistoriaPaciente(ci: string) {
-  try {
-    const registrosRef = ref(firebaseClient, BD_REFERENCES.registro);
-    const q = query(registrosRef, equalTo(ci), orderByChild('ci'))
-    const snapshot = await get(q);
-
-    return {
-      status: 200,
-      data: snapshot.val()
-    };
-  } catch (error) {
-    console.error('Error al consultar si el ci ya existe:', error);
-    throw new ApiError(errors.ERROR_CONSULTA_CI)
-  }
-}
-
-export { ciAlreadyExists, createPatient, createPatientRegistry, getHistoriaPaciente };
+export { ciAlreadyExists, createPatient, createPatientRegistry };

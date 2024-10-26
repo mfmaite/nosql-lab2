@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { consultarHistoria } from "../controllers/controller-historia";
+import { consultarHistoria } from "../controllers";
 
 const router = Router();
 

@@ -9,6 +9,9 @@ const registroSchema = yup.object({
   institucion: yup.string().required('El campo institución es obligatorio'),
   descripcion: yup.string().optional(),
   medicacion: yup.string().optional(),
+  createdAt: yup.string().required(),
 });
 
-export { registroSchema };
+type crearRegistroData = Omit<yup.InferType<typeof registroSchema>, 'createdAt'>;
+
+export { registroSchema, crearRegistroData };
