@@ -1,12 +1,6 @@
-type Paciente = {
-  nombre: string,
-  apellido: string,
-  ci: string,
-  fecha_nacimiento: string,
-  sexo: string,
-  telefono: string,
-  direccion: string,
-  email: string,
-}
+import { InferType } from "yup";
+import { pacienteSchema } from '../schema/paciente.schema';
+
+type Paciente = InferType<typeof pacienteSchema>;
 
 export { Paciente };
