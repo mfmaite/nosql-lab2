@@ -1,9 +1,11 @@
-import firebaseClient from '../config/firebase.js';
-import BD_REFERENCES from '../networking/references.js';
+import { Paciente } from '../types/paciente';
+import { Registro } from '../types/registro';
+import firebaseClient from '../config/firebase';
+import BD_REFERENCES from '../networking/references';
 import { ref, get, query, orderByChild, equalTo, push, set } from 'firebase/database';
 
 
-async function ciAlreadyExists(ci) {
+async function ciAlreadyExists(ci: string) {
   try {
     const q = query(ref(firebaseClient, 'pacientes'), orderByChild('ci'), equalTo(ci));
     const snapshot = await get(q);
@@ -15,7 +17,8 @@ async function ciAlreadyExists(ci) {
   }
 }
 
-async function createPatient(nombre, apellido, ci, fecha_nacimiento, sexo, telefono, direccion, email) {
+async function createPatient(paciente: Paciente) {
+  const { nombre, apellido, ci, fecha_nacimiento, sexo, telefono, direccion, email } = paciente;
   try {
     const pacientesRef = await push(ref(firebaseClient, BD_REFERENCES.pacientes));
 
@@ -39,17 +42,20 @@ async function createPatient(nombre, apellido, ci, fecha_nacimiento, sexo, telef
     };
   } catch (error) {
     console.error('Error al crear el paciente:', error);
+    const err = error as { message: string; status?: number };
     return {
       data: {
         message: 'Hubo un error al crear el paciente',
-        error: error.message
+        error: err.message
       },
-      status: 500
+      status: err.status,
     };
   }
 }
 
-async function createPatientRegistry(ci, fecha, tipo, diagnostico, medico, institucion, descripcion, medicacion) {
+async function createPatientRegistry(registro: Registro) {
+  const { ci, fecha, tipo, diagnostico, medico, institucion, descripcion, medicacion } = registro;
+
   try {
     const registroRef = await push(ref(firebaseClient, BD_REFERENCES.registro));
 
@@ -74,12 +80,13 @@ async function createPatientRegistry(ci, fecha, tipo, diagnostico, medico, insti
 
   } catch (error) {
     console.error('Error al crear el registro:', error);
+    const err = error as { message: string; status?: number };
     return {
       data: {
         message: 'Hubo un error al crear el registro',
-        error: error.message
+        error: err.message
       },
-      status: 500
+      status: err.status,
     };
   }
 

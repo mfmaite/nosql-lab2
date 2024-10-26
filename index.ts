@@ -1,9 +1,9 @@
-import cors from "cors";
-import pkg from "body-parser";
-import express from "express";
+import cors from 'cors';
+import pkg from 'body-parser';
+import express from 'express';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import routerApi from "./routes/index.js";
+import routerApi from './routes';
 
 const app = express();
 
@@ -19,7 +19,10 @@ const __dirname = dirname(__filename);
 // ];
 
 const options = {
-  origin: (origin, callback) => {
+  origin: (
+    origin: string | undefined,
+    callback: (err: Error | null, allowed?: boolean) => void
+  ) => {
     // Uncomment this to limit origins
     // let valid_origin = false;
     // console.log("Intento de conexion de: ", origin);
@@ -41,7 +44,12 @@ const options = {
 
 app.use(cors(options));
 
-app.use(function customErrorHandler(err, req, res, next) {
+app.use(function customErrorHandler(
+  err: Error,
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
   if (err) {
     res.status(400).send("Algo salio mal " + req.headers.origin);
   } else {
