@@ -22,14 +22,6 @@ async function crearPaciente(paciente: Paciente) {
   }
 }
 
-async function consultarHistoria(ci: string) {
-  return {
-    data: {
-      result: "Historia clinica del paciente " + ci
-    }, status: 200
-  };
-}
-
 async function crearRegistroPaciente(registro: Registro) {
   try {
     const existsCi = await ciAlreadyExists(registro.ci);
@@ -48,4 +40,4 @@ async function crearRegistroPaciente(registro: Registro) {
   }
 }
 
-export { crearPaciente, consultarHistoria, crearRegistroPaciente };
+export { crearPaciente, crearRegistroPaciente };

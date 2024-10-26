@@ -11,7 +11,7 @@ import { ref, get, query, orderByChild, equalTo, push, set } from 'firebase/data
 
 async function ciAlreadyExists(ci: string) {
   try {
-    const q = query(ref(firebaseClient, 'pacientes'), orderByChild('ci'), equalTo(ci));
+    const q = query(ref(firebaseClient, BD_REFERENCES.pacientes), orderByChild('ci'), equalTo(ci));
     const snapshot = await get(q);
 
     return snapshot.exists();
@@ -88,4 +88,21 @@ async function createPatientRegistry(registro: Registro) {
   }
 
 }
-export { ciAlreadyExists, createPatient, createPatientRegistry };
+
+async function getHistoriaPaciente(ci: string) {
+  try {
+    const registrosRef = ref(firebaseClient, BD_REFERENCES.registro);
+    const q = query(registrosRef, equalTo(ci), orderByChild('ci'))
+    const snapshot = await get(q);
+
+    return {
+      status: 200,
+      data: snapshot.val()
+    };
+  } catch (error) {
+    console.error('Error al consultar si el ci ya existe:', error);
+    throw new ApiError(errors.ERROR_CONSULTA_CI)
+  }
+}
+
+export { ciAlreadyExists, createPatient, createPatientRegistry, getHistoriaPaciente };
