@@ -1,10 +1,9 @@
-// Import the functions you need from the SDKs you need
-const { initializeApp } = require('firebase/app');
-const { getDatabase } = require('firebase/database');
-require('dotenv').config();
+import dotenv from 'dotenv';
+import { initializeApp } from 'firebase/app';
+import { getDatabase } from 'firebase/database';
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+dotenv.config();
+
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_APIKEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -19,4 +18,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const firebaseClient = getDatabase(app);
 
-module.exports = { firebaseClient };
+export default firebaseClient;

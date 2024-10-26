@@ -1,4 +1,4 @@
-const { ciAlreadyExists, createPatient } = require('../services/pacientes');
+import { ciAlreadyExists, createPatient } from '../services/pacientes.js';
 
 async function crearPaciente(datos) {
   const { nombre, apellido, ci, fecha_nacimiento, sexo, telefono, direccion, email } = datos;
@@ -30,4 +30,4 @@ async function consultarHistoria(datos) {
 }
 
 
-module.exports = { crearPaciente, consultarHistoria };
+export { crearPaciente, consultarHistoria };

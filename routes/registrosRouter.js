@@ -1,5 +1,6 @@
-const express = require('express');
-const router = express.Router();
+import { Router } from 'express';
+
+const router = Router();
 
 router.get('/', async (_, res) => {
   try {
@@ -10,4 +11,4 @@ router.get('/', async (_, res) => {
   }
 });
 
-module.exports = router;
+export default router;

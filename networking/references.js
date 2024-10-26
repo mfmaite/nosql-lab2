@@ -2,4 +2,4 @@ const BD_REFERENCES = {
   pacientes: '/pacientes',
 }
 
-module.exports = { BD_REFERENCES };
+export default BD_REFERENCES;

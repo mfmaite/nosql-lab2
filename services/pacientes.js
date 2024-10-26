@@ -1,7 +1,7 @@
-const { firebaseClient } = require('../config/firebase');
-const { ref, get, query, orderByChild, equalTo, push, set } = require('firebase/database');
+import firebaseClient from '../config/firebase.js';
+import BD_REFERENCES from '../networking/references.js';
+import { ref, get, query, orderByChild, equalTo, push, set } from 'firebase/database';
 
-const { BD_REFERENCES } = require('../networking/references');
 
 async function ciAlreadyExists(ci) {
   try {
@@ -49,4 +49,4 @@ async function createPatient(nombre, apellido, ci, fecha_nacimiento, sexo, telef
   }
 }
 
-module.exports = { ciAlreadyExists, createPatient };
+export { ciAlreadyExists, createPatient };

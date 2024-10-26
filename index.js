@@ -1,10 +1,15 @@
-const express = require("express");
-const cors = require("cors");
-const bp = require("body-parser");
-const routerApi = require("./routes");
-const path = require('path');
+import cors from "cors";
+import pkg from "body-parser";
+import express from "express";
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import routerApi from "./routes/index.js";
 
-let app = express();
+const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 // const whitelist = [
 //   { dominio: "http://localhost:8080"},
 //   { dominio: "http://localhost:80"},
@@ -15,13 +20,17 @@ let app = express();
 
 const options = {
   origin: (origin, callback) => {
+    // Uncomment this to limit origins
     // let valid_origin = false;
     // console.log("Intento de conexion de: ", origin);
     // for (let index = 0; index < whitelist.length; index++) {
-      // if (whitelist[index].dominio.includes(origin)) {
-       let valid_origin = true;
-      // }
+    //   if (whitelist[index].dominio.includes(origin)) {
+    //    let valid_origin = true;
+    //   }
     // }
+
+    const valid_origin = true;
+
     if (valid_origin) {
       callback(null, true);
     } else {
@@ -41,9 +50,9 @@ app.use(function customErrorHandler(err, req, res, next) {
 });
 
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(bp.json());
-app.use(bp.urlencoded({ extended: true }));
+app.use(express.static(join(__dirname, 'public')));
+app.use(pkg.json());
+app.use(pkg.urlencoded({ extended: true }));
 
 app.listen(3000, () =>
   console.log("Express server is runnig at port no : 3000"),

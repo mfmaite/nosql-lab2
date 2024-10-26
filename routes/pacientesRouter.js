@@ -1,6 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const { crearPaciente, consultarHistoria } = require('../controllers/controller-pacientes');
+import { Router } from 'express';
+import { crearPaciente, consultarHistoria } from '../controllers/controller-pacientes.js';
+
+const router = Router();
 
 router.post('/', async (req, res) => {
   try {
@@ -31,4 +32,4 @@ router.post('/registro', async (req, res) => {
 });
 
 
-module.exports = router;
+export default router;
