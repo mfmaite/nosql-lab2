@@ -1,4 +1,4 @@
-import { Registro } from '../types/registro';
+import { Registro } from '../types/registro.js';
 import dayjs from 'dayjs';
 
 const orderByDate = (registros: Registro[]) => {

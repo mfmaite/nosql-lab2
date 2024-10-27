@@ -1,9 +1,9 @@
-import { Paciente } from '../types/paciente';
-import { Registro } from '../types/registro';
-import firebaseClient from '../config/firebase';
-import BD_REFERENCES from '../networking/references';
-import { ApiError, errors, validateInput } from '../utils';
-import { pacienteSchema, registroSchema } from '../schema';
+import { Paciente } from '../types/paciente.js';
+import { Registro } from '../types/registro.js';
+import firebaseClient from '../config/firebase.js';
+import BD_REFERENCES from '../networking/references.js';
+import { ApiError, errors, validateInput } from '../utils/index.js';
+import { pacienteSchema, registroSchema } from '../schema/index.js';
 import { ref, get, query, orderByChild, equalTo, push, set } from 'firebase/database';
 
 

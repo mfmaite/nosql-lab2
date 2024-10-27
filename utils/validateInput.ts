@@ -1,4 +1,4 @@
-import { ApiError, ErrorData } from '../utils/apiError';
+import { ApiError, ErrorData } from '../utils/apiError.js';
 import * as yup from 'yup';
 
 export function validateInput<SchemaType extends yup.AnySchema>(

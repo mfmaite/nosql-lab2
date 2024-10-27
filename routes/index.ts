@@ -1,7 +1,7 @@
-import home from './homeRouter';
+import home from './homeRouter.js';
 import { Router, json } from 'express';
-import pacientes from './pacientesRouter';
-import historial from './historialRouter';
+import pacientes from './pacientesRouter.js';
+import historial from './historialRouter.js';
 import { Express } from 'express-serve-static-core';
 
 function routerApi(app: Express) {
