@@ -1,17 +1,15 @@
-import { Paciente } from '../types/paciente';
-import { Registro } from '../types/registro';
-import firebaseClient from '../config/firebase';
-import BD_REFERENCES from '../networking/references';
-import { ApiError, errors } from '../utils/apiError';
-import { validateInput } from '../utils/validateInput';
-import { pacienteSchema } from '../schema/paciente.schema';
-import { registroSchema } from '../schema/registro.schema';
+import { Paciente } from '../types/paciente.js';
+import { Registro } from '../types/registro.js';
+import firebaseClient from '../config/firebase.js';
+import BD_REFERENCES from '../networking/references.js';
+import { ApiError, errors, validateInput } from '../utils/index.js';
+import { pacienteSchema, registroSchema } from '../schema/index.js';
 import { ref, get, query, orderByChild, equalTo, push, set } from 'firebase/database';
 
 
 async function ciAlreadyExists(ci: string) {
   try {
-    const q = query(ref(firebaseClient, 'pacientes'), orderByChild('ci'), equalTo(ci));
+    const q = query(ref(firebaseClient, BD_REFERENCES.pacientes), orderByChild('ci'), equalTo(ci));
     const snapshot = await get(q);
 
     return snapshot.exists();
@@ -88,4 +86,5 @@ async function createPatientRegistry(registro: Registro) {
   }
 
 }
+
 export { ciAlreadyExists, createPatient, createPatientRegistry };

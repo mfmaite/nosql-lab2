@@ -1,7 +1,7 @@
-import { Paciente } from '../types/paciente';
-import { Registro } from '../types/registro';
-import { ApiError, errors } from '../utils/apiError';
-import { ciAlreadyExists, createPatient, createPatientRegistry } from '../services/pacientes';
+import { Paciente } from '../types/paciente.js';
+import { ApiError, errors } from '../utils/index.js';
+import { crearRegistroData } from '../schema/registro.schema.js';
+import { ciAlreadyExists, createPatient, createPatientRegistry } from '../services/index.js';
 
 async function crearPaciente(paciente: Paciente) {
   try {
@@ -22,19 +22,11 @@ async function crearPaciente(paciente: Paciente) {
   }
 }
 
-async function consultarHistoria(ci: string) {
-  return {
-    data: {
-      result: "Historia clinica del paciente " + ci
-    }, status: 200
-  };
-}
-
-async function crearRegistroPaciente(registro: Registro) {
+async function crearRegistroPaciente(registro: crearRegistroData) {
   try {
     const existsCi = await ciAlreadyExists(registro.ci);
     if (!existsCi) throw new ApiError(errors.CI_NOT_FOUND);
-    return createPatientRegistry(registro);
+    return createPatientRegistry({ ...registro, createdAt: new Date().toString() });
 
   } catch (error) {
     const err = error as ApiError;
@@ -48,4 +40,4 @@ async function crearRegistroPaciente(registro: Registro) {
   }
 }
 
-export { crearPaciente, consultarHistoria, crearRegistroPaciente };
+export { crearPaciente, crearRegistroPaciente };
