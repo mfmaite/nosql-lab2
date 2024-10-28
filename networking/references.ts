@@ -3,5 +3,4 @@ const BD_REFERENCES = {
   registro: '/registro'
 }
 
-
-module.exports = { BD_REFERENCES };
+export default BD_REFERENCES;
