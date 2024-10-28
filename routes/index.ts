@@ -1,8 +1,10 @@
-import home from './homeRouter.js';
 import { Router, json } from 'express';
+import { Express } from 'express-serve-static-core';
+
+import home from './homeRouter.js';
+import registro from './registroRouter.js';
 import pacientes from './pacientesRouter.js';
 import historial from './historialRouter.js';
-import { Express } from 'express-serve-static-core';
 
 function routerApi(app: Express) {
   const router = Router();
@@ -11,6 +13,7 @@ function routerApi(app: Express) {
 
   router.use('/pacientes', pacientes);
   router.use('/historia', historial);
+  router.use('/registro', registro);
   router.use('/', home);
 }
 
