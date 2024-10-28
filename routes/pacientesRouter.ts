@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { crearPaciente } from '../controllers/index.js';
+import { crearPaciente, crearRegistroPaciente } from '../controllers/index.js';
 
 const router = Router();
 
@@ -11,6 +11,5 @@ router.post('/', async (req, res) => {
     res.send(err);
   }
 });
-
 
 export default router;
