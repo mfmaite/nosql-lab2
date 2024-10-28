@@ -1,2 +1,2 @@
-export { crearPaciente, crearRegistroPaciente } from './controller-pacientes';
-export { consultarHistoria } from './controller-historia';
+export { consultarHistoria } from './controller-historia.js';
+export { crearPaciente, crearRegistroPaciente } from './controller-pacientes.js';

@@ -1,5 +1,5 @@
-import { ApiError, errors } from '../utils';
-import { ciAlreadyExists, getHistoriaPaciente } from '../services';
+import { ApiError, errors } from '../utils/index.js';
+import { ciAlreadyExists, getHistoriaPaciente } from '../services/index.js';
 
 async function consultarHistoria({ ci }: { ci: string }) {
   try {

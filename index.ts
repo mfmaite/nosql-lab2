@@ -3,7 +3,7 @@ import pkg from 'body-parser';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import routerApi from './routes';
+import routerApi from './routes/index.js';
 
 const app = express();
 

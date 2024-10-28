@@ -1,7 +1,7 @@
-import { Paciente } from '../types/paciente';
-import { ApiError, errors } from '../utils';
-import { crearRegistroData } from '../schema/registro.schema';
-import { ciAlreadyExists, createPatient, createPatientRegistry } from '../services';
+import { Paciente } from '../types/paciente.js';
+import { ApiError, errors } from '../utils/index.js';
+import { crearRegistroData } from '../schema/registro.schema.js';
+import { ciAlreadyExists, createPatient, createPatientRegistry } from '../services/index.js';
 
 async function crearPaciente(paciente: Paciente) {
   try {

@@ -1,2 +1,2 @@
-export { getHistoriaPaciente } from './historia';
-export { ciAlreadyExists, createPatient, createPatientRegistry } from './pacientes';
+export { getHistoriaPaciente } from './historia.js';
+export { ciAlreadyExists, createPatient, createPatientRegistry } from './pacientes.js';

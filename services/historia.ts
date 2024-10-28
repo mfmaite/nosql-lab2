@@ -1,6 +1,6 @@
-import firebaseClient from '../config/firebase';
-import BD_REFERENCES from '../networking/references';
-import { ApiError, errors, orderByDate } from '../utils';
+import firebaseClient from '../config/firebase.js';
+import BD_REFERENCES from '../networking/references.js';
+import { ApiError, errors, orderByDate } from '../utils/index.js';
 import { ref, get, query, orderByChild, equalTo } from 'firebase/database';
 
 async function getHistoriaPaciente(ci: string) {
