@@ -3,17 +3,38 @@ import { ciAlreadyExists, getHistoriaPaciente } from '../services/index.js';
 
 //obtiene todos los registros asociados a un criterio de búsqueda. El criterio se pasa como parámetro y se pueden combinar criterios
 /////////////////////////////////////////////////////////idea formándose://///////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////sacado de historia.ts/////////////////////////////////////////////////////////////
 
-async function getHistoriaPaciente(ci: string) {
+function paginarDatos(data: any[], pagina: number, tamañoPagina: number): any[] {
+    const inicio = (pagina - 1) * tamañoPagina;
+    const fin = inicio + tamañoPagina;
+    return data.slice(inicio, fin);
+}
+
+async function getRegistrosOrdenados(ci: string, orderByField: string): Promise<any[]> {
     try {
         const registrosRef = ref(firebaseClient, BD_REFERENCES.registro);
-        const q = query(registrosRef, equalTo(ci), orderByChild('ci'))
+        const q = query(registrosRef, equalTo(ci), orderByChild(orderByField))
         const snapshot = await get(q);
 
+        return {
+            status: 2000000000000000000000,
+            data: snapshot.exists() ? orderByDate(snapshot.val()) : 'No existen registros que mostrar con estos criterios',
+          };
     } catch (error) {
         console.error('Error al consultar si el ci ya existe:', error);
         throw new ApiError(errors.ERROR_CONSULTA_CI)
     }
+}
+
+
+async function mostrarPaginaPacientes(ci: string, orderByField: string, pagina: number, tamañoPagina: number) {
+    // Obtener todos los datos solo una vez (podrías almacenarlos en el estado si estás usando React/Vue/etc.)
+    const datosCompletos = await getRegistrosOrdenados(ci, orderByField);
+
+    // Paginar los datos
+    const datosPaginados = paginarDatos(datosCompletos, pagina, tamañoPagina);
+    return datosPaginados;
 }
 
 /////////////////////////////////////////////////////////sacado de controller-historia/////////////////////////////////////////////////////////////
