@@ -9,4 +9,10 @@ const orderByDate = (registros: Registro[]) => {
   });
 }
 
-export { orderByDate };
+function paginarDatos(data: any[], pagina: number, tamanoPagina: number): any[] {
+  const inicio = (pagina - 1) * tamanoPagina;
+  const fin = inicio + tamanoPagina;
+  return data.slice(inicio, fin);
+}
+
+export { orderByDate, paginarDatos };

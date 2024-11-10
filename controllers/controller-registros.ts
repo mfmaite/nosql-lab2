@@ -1,39 +1,47 @@
-import { ApiError, errors } from '../utils/index.js';
+import { ApiError, errors, orderByDate } from '../utils/index.js';
 import { ciAlreadyExists, getHistoriaPaciente } from '../services/index.js';
-
+import firebaseClient from '../config/firebase.js';
+import { Request, Response } from 'express';
+import { equalTo, orderByChild, get, ref, query } from 'firebase/database';
+import BD_REFERENCES from '../networking/references.js';
 //obtiene todos los registros asociados a un criterio de búsqueda. El criterio se pasa como parámetro y se pueden combinar criterios
 /////////////////////////////////////////////////////////idea formándose://///////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////sacado de historia.ts/////////////////////////////////////////////////////////////
 
-function paginarDatos(data: any[], pagina: number, tamañoPagina: number): any[] {
-    const inicio = (pagina - 1) * tamañoPagina;
-    const fin = inicio + tamañoPagina;
-    return data.slice(inicio, fin);
-}
-
-async function getRegistrosOrdenados(ci: string, orderByField: string): Promise<any[]> {
+async function getRegistrosOrdenados({ tipo, diagnostico, medico, institucion }: {
+    tipo?: 'Consulta' | 'Examen' | 'Internacion',
+    diagnostico?: string,
+    medico?: string,
+    institucion?: string
+}) {
     try {
         const registrosRef = ref(firebaseClient, BD_REFERENCES.registro);
-        const q = query(registrosRef, equalTo(ci), orderByChild(orderByField))
+        const filtroExiste = [];
+        if (tipo) filtroExiste.push(orderByChild('tipo'), equalTo(tipo))
+        if (diagnostico) filtroExiste.push(orderByChild('diagnostico'), equalTo(diagnostico));
+        if (medico) filtroExiste.push(orderByChild('medico'), equalTo(medico));
+        if (institucion) filtroExiste.push(orderByChild('institucion'), equalTo(institucion));
+        console.log(...filtroExiste)
+        const q = query(registrosRef,...filtroExiste)
         const snapshot = await get(q);
-
         return {
-            status: 2000000000000000000000,
+            status: 200,
             data: snapshot.exists() ? orderByDate(snapshot.val()) : 'No existen registros que mostrar con estos criterios',
-          };
+        };
     } catch (error) {
-        console.error('Error al consultar si el ci ya existe:', error);
+        console.error('Error al consultar registros:', error);
         throw new ApiError(errors.ERROR_CONSULTA_CI)
     }
 }
 
-
+export { getRegistrosOrdenados }
+/*
 async function mostrarPaginaPacientes(ci: string, orderByField: string, pagina: number, tamañoPagina: number) {
     // Obtener todos los datos solo una vez (podrías almacenarlos en el estado si estás usando React/Vue/etc.)
     const datosCompletos = await getRegistrosOrdenados(ci, orderByField);
 
     // Paginar los datos
-    const datosPaginados = paginarDatos(datosCompletos, pagina, tamañoPagina);
+    //const datosPaginados = paginarDatos(datosCompletos, pagina, tamañoPagina);
     return datosPaginados;
 }
 
@@ -73,7 +81,7 @@ const registroSchema = yup.object({
   });
 
 /////////////////////////////////////////////////////////sacado de chatgpt/////////////////////////////////////////////////////////////
-import { Request, Response } from 'express';
+
 
 // Ejemplo de interfaz para los registros médicos
 interface MedicalRecord {
@@ -141,3 +149,4 @@ export const getMedicalRecordsByCriteria = (req: Request, res: Response) => {
 
     res.json(filteredRecords);
 };
+*/
