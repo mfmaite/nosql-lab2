@@ -28,6 +28,10 @@ export const errors: Record<string, ErrorData> = {
     status: 400,
     description: "Registro invalido",
   },
+  MISSING_CI: {
+    status: 400,
+    description: "El campo cédula es obligatorio",
+  },
   PACIENTE_ALREADY_EXISTS: {
     status: 401,
     description: "Ya existe un paciente con esta cédula",

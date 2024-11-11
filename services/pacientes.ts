@@ -2,6 +2,7 @@ import { Paciente } from '../types/paciente.js';
 import { Registro } from '../types/registro.js';
 import firebaseClient from '../config/firebase.js';
 import BD_REFERENCES from '../networking/references.js';
+import { getPacienteSchema } from '../schema/paciente.schema.js';
 import { ApiError, errors, validateInput } from '../utils/index.js';
 import { pacienteSchema, registroSchema } from '../schema/index.js';
 import { ref, get, query, orderByChild, equalTo, push, set } from 'firebase/database';
@@ -9,6 +10,7 @@ import { ref, get, query, orderByChild, equalTo, push, set } from 'firebase/data
 
 async function ciAlreadyExists(ci: string) {
   try {
+    validateInput(getPacienteSchema, { ci }, errors.MISSING_CI)
     const q = query(ref(firebaseClient, BD_REFERENCES.pacientes), orderByChild('ci'), equalTo(ci));
     const snapshot = await get(q);
 
