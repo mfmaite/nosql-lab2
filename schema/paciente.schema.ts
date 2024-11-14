@@ -11,4 +11,8 @@ const pacienteSchema = yup.object({
   email: yup.string().required('El campo email es obligatorio'),
 });
 
-export { pacienteSchema };
+const getPacienteSchema = yup.object({
+  ci: yup.string().required('El campo cédula es obligatorio'),
+});
+
+export { pacienteSchema, getPacienteSchema };
