@@ -4,7 +4,8 @@ import firebaseClient from '../config/firebase.js';
 import BD_REFERENCES from '../networking/references.js';
 import { ApiError, errors, validateInput } from '../utils/index.js';
 import { pacienteSchema, registroSchema } from '../schema/index.js';
-import { ref, get, query, orderByChild, equalTo, push, set } from 'firebase/database';
+import { ref, get, query, orderByChild, equalTo, push, set, remove } from 'firebase/database';
+
 
 
 async function ciAlreadyExists(ci: string) {
@@ -87,4 +88,73 @@ async function createPatientRegistry(registro: Registro) {
 
 }
 
-export { ciAlreadyExists, createPatient, createPatientRegistry };
+
+async function deletePatient(ci: string) {
+  try {
+    const q = query(ref(firebaseClient, BD_REFERENCES.pacientes), orderByChild('ci'), equalTo(ci));
+    const snapshot = await get(q); 
+
+    if (!snapshot.exists()) {
+      throw new ApiError(errors.PACIENTE_NO_ENCONTRADO);
+    }
+
+    const patientsToDelete: string[] = [];
+    snapshot.forEach((childSnapshot) => {
+      patientsToDelete.push(childSnapshot.key as string);
+    });
+
+    for (const key of patientsToDelete) {
+      const patientRef = ref(firebaseClient, `${BD_REFERENCES.pacientes}/${key}`);
+      await remove(patientRef); 
+    }
+    await deletePatientRegistry(ci);
+
+    return {
+      data: {
+        message: 'Paciente eliminado exitosamente'
+      },
+      status: 200
+    };
+
+  } catch (error) {
+    console.error('Error al eliminar el paciente:', error);
+    const err = error as { message: string; status?: number };
+    return {
+      data: {
+        message: 'Hubo un error al eliminar el paciente',
+        error: err.message
+      },
+      status: err.status,
+    };
+  }
+}
+
+async function deletePatientRegistry(ci: string) {
+  try {
+    const q = query(ref(firebaseClient, BD_REFERENCES.registro), orderByChild('ci'), equalTo(ci));
+    const snapshot = await get(q);
+    if (snapshot.exists()) {
+      const registrosToDelete: string[] = [];
+      snapshot.forEach((childSnapshot) => {
+        registrosToDelete.push(childSnapshot.key as string);
+      });
+
+      for (const key of registrosToDelete) {
+        const registroRef = ref(firebaseClient, `${BD_REFERENCES.registro}/${key}`);
+        await remove(registroRef);
+      }
+    }
+  } catch (error) {
+    console.error('Error al eliminar los registros del paciente:', error);
+    const err = error as { message: string; status?: number };
+    return{
+      data: {
+        message: 'Hubo un error al eliminar los registros del paciente',
+        error: err.message
+      },
+      status: err.status,
+    }
+  }
+}
+
+export { ciAlreadyExists, createPatient, createPatientRegistry, deletePatient };

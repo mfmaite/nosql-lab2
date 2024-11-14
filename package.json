@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "npx newman run ./postman-collections/TEST.postman_collection.json",
+    "test": "npx newman run ./postman-collections/Tests.postman_collection.json",
     "build": "rimraf ./dist && tsc",
     "start": "npm run build && node dist/index.js",
     "dev": "nodemon -I --exec node --experimental-specifier-resolution=node  --loader ts-node/esm ./index.ts",
