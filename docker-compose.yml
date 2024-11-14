@@ -1,10 +1,25 @@
 version: "3.7"
 services:
- api:
-  build:
-   context: .
-   target: production
-  ports:
-   - 3000:3000
-  env_file:
+  api:
+    build:
+      context: .
+      target: production
+    ports:
+      - 3000:3000
+    env_file:
       - .env
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    user: root  # Allows Jenkins to use root permissions if necessary
+    ports:
+      - 8080:8080  # Jenkins UI
+      - 50000:50000  # Jenkins agent communication
+    volumes:
+      - jenkins_home:/var/jenkins_home  # Persistent volume for Jenkins data
+      - /var/run/docker.sock:/var/run/docker.sock  # Allows Jenkins to interact with Docker on the host
+    environment:
+      - JENKINS_OPTS=--prefix=/jenkins  # Optional: run Jenkins under a prefix like `/jenkins`
+
+volumes:
+  jenkins_home:
