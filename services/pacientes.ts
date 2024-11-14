@@ -5,7 +5,7 @@ import BD_REFERENCES from '../networking/references.js';
 import { getPacienteSchema } from '../schema/paciente.schema.js';
 import { ApiError, errors, validateInput } from '../utils/index.js';
 import { pacienteSchema, registroSchema } from '../schema/index.js';
-import { ref, get, query, orderByChild, equalTo, push, set } from 'firebase/database';
+import { ref, get, query, orderByChild, equalTo, push, set, limitToFirst, orderByValue } from 'firebase/database';
 
 
 async function ciAlreadyExists(ci: string) {
@@ -108,9 +108,53 @@ const getPatientId = async (ci: string) => {
   }
 }
 
+const getPatient = async (ci: string): Promise<Paciente | null> => {
+  try {
+    validateInput(getPacienteSchema, { ci }, errors.MISSING_CI);
+
+    const q = query(ref(firebaseClient, BD_REFERENCES.pacientes), orderByChild('ci'), equalTo(ci));
+    const snapshot = await get(q);
+
+    const patientData = snapshot.exists() ? Object.values(snapshot.val())[0] as Paciente : null;
+
+    if (patientData && patientData.registro) {
+      // Convertir los registros en un array de objetos
+      const registrosArray = Object.values(patientData.registro);
+      patientData.registro = registrosArray;  // Reemplazar los registros con el arreglo
+    }
+
+    return patientData;
+  } catch (e) {
+    console.error('Error al obtener paciente:', e);
+    throw new ApiError(errors.ERROR_GET_PACIENTE);
+  }
+}
+
+const getRegistros = async (idPaciente: string, page: number, limit: number): Promise<Registro[] | null> => {
+  try {
+    const q = query(ref(
+      firebaseClient,
+      BD_REFERENCES.paciente_registro(idPaciente)),
+      limitToFirst(limit * page),
+    );
+    const snapshot = await get(q);
+
+    if (!snapshot.exists()) return null;
+
+    const registros = Object.values(snapshot.val()) as Registro[];
+
+    return registros.slice(limit * (page - 1), registros.length);
+  } catch (e) {
+    console.error('Error al obtener registros:', e);
+    throw new ApiError(errors.ERROR_GET_PACIENTE);
+  }
+}
+
 export {
   ciAlreadyExists,
   createPatient,
   createPatientRegistry,
-  getPatientId
+  getPatientId,
+  getPatient,
+  getRegistros,
 };
