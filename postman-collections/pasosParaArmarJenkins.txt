@@ -1,0 +1,12 @@
+4. Instrucciones para Restaurar el Volumen de Jenkins:
+
+Crear el volumen jenkins_home:
+docker volume create jenkins_home
+
+Restaurar el contenido del volumen:
+docker run --rm -v jenkins_home:/data -v $(pwd):/backup busybox tar xvf /backup/jenkins_home_backup.tar -C /
+
+5. Levantar los Contenedores:
+Una vez restaurados los volúmenes y cargadas las imágenes, tus compañeros pueden ejecutar:
+
+docker-compose up --build
