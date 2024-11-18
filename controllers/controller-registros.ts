@@ -1,7 +1,21 @@
-import { equalTo, orderByChild, get, ref, query } from 'firebase/database';
+import { getDatabase, ref, get, query, orderByChild, equalTo, DataSnapshot, Query, DatabaseReference, QueryConstraint } from 'firebase/database';
 import { ApiError, errors, orderByDate } from '../utils/index.js';
 import BD_REFERENCES from '../networking/references.js';
 import firebaseClient from '../config/firebase.js';
+
+interface Registro {
+    tipo: 'Consulta' | 'Examen' | 'Internacion';
+    diagnostico: string;
+    medico: string;
+    institucion: string;
+}
+
+interface GetRegistrosOrdenadosParams {
+    tipo?: 'Consulta' | 'Examen' | 'Internacion';
+    diagnostico?: string;
+    medico?: string;
+    institucion?: string;
+}
 
 async function getRegistrosOrdenados({ tipo, diagnostico, medico, institucion }: {
     tipo?: 'Consulta' | 'Examen' | 'Internacion',
@@ -11,34 +25,118 @@ async function getRegistrosOrdenados({ tipo, diagnostico, medico, institucion }:
 }) {
     try {
         const registrosRef = ref(firebaseClient, BD_REFERENCES.registro);
-        const filtroExiste = [];
+        const filtroExiste: QueryConstraint[] = [];
+        let dbQuery: DatabaseReference | Query = registrosRef;
         if (tipo) {
             filtroExiste.push(orderByChild('tipo'), equalTo(tipo));
-        } 
+            dbQuery = query(registrosRef, orderByChild('tipo'), equalTo(tipo));
+            // Obtenemos los datos del nodo consultado
+            const snapshot = await get(dbQuery);
+
+            if (!snapshot.exists()) {
+                return [];
+            }
+
+            // Convertimos el snapshot a un array de `Registro`
+            const registros: Registro[] = [];
+            snapshot.forEach((childSnapshot: DataSnapshot) => {
+                const data = childSnapshot.val();
+                if (data) {
+                    registros.push(data as Registro); // Aquí hacemos el cast explícito al tipo Registro.
+                }
+            });
+            return    registros.filter(registro =>
+                (!diagnostico || registro.diagnostico === diagnostico) &&
+                (!medico || registro.medico === medico) &&
+                (!institucion || registro.institucion === institucion)
+            );
+        }
         else if (diagnostico) {
             filtroExiste.push(orderByChild('diagnostico'), equalTo(diagnostico));
-            if (medico) {
-                //código para ordenar por el campo médico también
-                if (institucion) {
-                  //  código para ordenar por el campo institución
+            dbQuery = query(registrosRef, orderByChild('diagnostico'), equalTo(diagnostico));
+            // Obtenemos los datos del nodo consultado
+            const snapshot = await get(dbQuery);
+
+            if (!snapshot.exists()) {
+                return [];
+            }
+
+            // Convertimos el snapshot a un array de `Registro`
+            const registros: Registro[] = [];
+            snapshot.forEach((childSnapshot: DataSnapshot) => {
+                const data = childSnapshot.val();
+                if (data) {
+                    registros.push(data as Registro); // Aquí hacemos el cast explícito al tipo Registro.
                 }
-            }
-            else if (institucion) {
-                //código para ordenar por el campo institución
-            }
+            });
+            return registros.filter(registro =>
+                (!tipo || registro.tipo === tipo) &&
+                (!medico || registro.medico === medico) &&
+                (!institucion || registro.institucion === institucion)
+            );
         }
         else if (medico) {
             filtroExiste.push(orderByChild('medico'), equalTo(medico));
-            if (institucion) {
-                //código para ordenar por el campo institución
+            dbQuery = query(registrosRef, orderByChild('medico'), equalTo(medico));
+            // Obtenemos los datos del nodo consultado
+            const snapshot = await get(dbQuery);
+
+            if (!snapshot.exists()) {
+                return [];
             }
+
+            // Convertimos el snapshot a un array de `Registro`
+            const registros: Registro[] = [];
+            snapshot.forEach((childSnapshot: DataSnapshot) => {
+                const data = childSnapshot.val();
+                if (data) {
+                    registros.push(data as Registro); // Aquí hacemos el cast explícito al tipo Registro.
+                }
+            });
+
+            return registros.filter(registro =>
+                (!tipo || registro.tipo === tipo) &&
+                (!diagnostico || registro.diagnostico === diagnostico) &&
+                (!institucion || registro.institucion === institucion)
+            );
         }
         else if (institucion) {
             filtroExiste.push(orderByChild('institucion'), equalTo(institucion));
+            dbQuery = query(registrosRef, orderByChild('institucion'), equalTo(institucion));
+            // Obtenemos los datos del nodo consultado
+            const snapshot = await get(dbQuery);
+
+            if (!snapshot.exists()) {
+                return [];
+            }
+
+            // Convertimos el snapshot a un array de `Registro`
+            const registros: Registro[] = [];
+            snapshot.forEach((childSnapshot: DataSnapshot) => {
+                const data = childSnapshot.val();
+                if (data) {
+                    registros.push(data as Registro); // Aquí hacemos el cast explícito al tipo Registro.
+                }
+            });
+
+            return registros.filter(registro =>
+                (!tipo || registro.tipo === tipo) &&
+                (!diagnostico || registro.diagnostico === diagnostico) &&
+                (!medico || registro.institucion === institucion)
+            );
         }
-        console.log(...filtroExiste)
-        const q = query(registrosRef,...filtroExiste)
-        const snapshot = await get(q);
+        else {
+            /* if (filtroExiste.length > 0) {
+                dbQuery = query(registrosRef, ...filtroExiste); // Ahora es seguro.
+            } */
+            const q = query(registrosRef,...filtroExiste)
+            const snapshot = await get(q);
+            return {
+                status: 200,
+                data: snapshot.exists() ? orderByDate(snapshot.val()) : 'No existen registros que mostrar con estos criterios',
+            };
+        }
+        const snapshot = await get(dbQuery);
         return {
             status: 200,
             data: snapshot.exists() ? orderByDate(snapshot.val()) : 'No existen registros que mostrar con estos criterios',
@@ -50,76 +148,3 @@ async function getRegistrosOrdenados({ tipo, diagnostico, medico, institucion }:
 }
 
 export { getRegistrosOrdenados }
-
-/*
-import { equalTo, orderByChild, get, ref, query } from 'firebase/database';
-import { ApiError, errors, orderByDate } from '../utils/index.js';
-import BD_REFERENCES from '../networking/references.js';
-import firebaseClient from '../config/firebase.js';
-
-async function getRegistrosOrdenados({
-    tipo,
-    diagnostico,
-    medico,
-    institucion
-}: {
-    tipo?: 'Consulta' | 'Examen' | 'Internacion',
-    diagnostico?: string,
-    medico?: string,
-    institucion?: string
-}) {
-    try {
-        const registrosRef = ref(firebaseClient, BD_REFERENCES.registro);
-        
-        // Selección del criterio principal de filtro (el más restrictivo)
-        let criterioPrincipal;
-        let valorCriterioPrincipal;
-
-        if (tipo) {
-            criterioPrincipal = 'tipo';
-            valorCriterioPrincipal = tipo;
-        } else if (diagnostico) {
-            criterioPrincipal = 'diagnostico';
-            valorCriterioPrincipal = diagnostico;
-        } else if (medico) {
-            criterioPrincipal = 'medico';
-            valorCriterioPrincipal = medico;
-        } else if (institucion) {
-            criterioPrincipal = 'institucion';
-            valorCriterioPrincipal = institucion;
-        }
-
-        // Crear consulta con el criterio principal
-        const q = query(registrosRef, orderByChild(criterioPrincipal), equalTo(valorCriterioPrincipal));
-        const snapshot = await get(q);
-
-        // Procesar los resultados en el cliente
-        let registros = snapshot.exists() ? snapshot.val() : {};
-        registros = Object.values(registros); // Convertir a un array para filtrado y ordenación
-
-        // Aplicar filtros adicionales en el cliente
-        if (diagnostico && criterioPrincipal !== 'diagnostico') {
-            registros = registros.filter(registro => registro.diagnostico === diagnostico);
-        }
-        if (medico && criterioPrincipal !== 'medico') {
-            registros = registros.filter(registro => registro.medico === medico);
-        }
-        if (institucion && criterioPrincipal !== 'institucion') {
-            registros = registros.filter(registro => registro.institucion === institucion);
-        }
-
-        // Ordenar los registros por fecha en el cliente
-        const registrosOrdenados = orderByDate(registros);
-
-        return {
-            status: 200,
-            data: registrosOrdenados.length > 0 ? registrosOrdenados : 'No existen registros que mostrar con estos criterios'
-        };
-    } catch (error) {
-        console.error('Error al consultar registros:', error);
-        throw new ApiError(errors.ERROR_CONSULTA_CI);
-    }
-}
-
-export { getRegistrosOrdenados };
-*/
