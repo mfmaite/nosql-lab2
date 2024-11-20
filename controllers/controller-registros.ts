@@ -152,7 +152,7 @@ async function getRegistrosOrdenados({ tipo, diagnostico, medico, institucion }:
     }
   } catch (error) {
     console.error('Error al consultar registros:', error);
-    throw new ApiError(errors.ERROR_CONSULTA_CI)
+    throw new ApiError(errors.ERROR_CONSULTA_REGISTROS)
   }
 }
 

@@ -40,5 +40,9 @@ export const errors: Record<string, ErrorData> = {
   ERROR_CONSULTA_CI: {
     status: 500,
     description: "Error al consultar la CI",
+  },
+  ERROR_CONSULTA_REGISTROS: {
+    status: 500,
+    description: "Error al consultar registros",
   }
 }
