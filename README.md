@@ -98,6 +98,19 @@ Obtiene los registros correspondientes al paciente con la cédula `user_ci`, ord
 - - `402` - No existe un paciente con esa cédula de identidad
 - - `500` - Error del servidor
 
+### GET /registro?tipo={tipo}&diagnostico={diagnostico}&medico={medico}&institucion={institucion}
+Obtiene registros. Estos pueden ser filtrados por los parámetros opcionales `tipo`, `diagnostico`, `medico` o `institucion`.
+Estos parámetros pueden ser combinados.
+- **URL:** /registro
+- **Método:** `GET`
+- **Query params:**
+- - `tipo` (opcional) - El tipo de consulta. Este puede ser `Consulta`,`Examen` o `Internacion`
+- - `diagnostico` (opcional) - El diagnóstico recibido
+- - `medico` (opcional) - El médico que atendió al paciente
+- - `institucion` (opcional) - La institución donde el paciente fue atendido
+- **Respuesta:**
+- - `200` - Se obtiene la lista de registros
+- - `500` - Error del servidor
 
 ## Construcción
 Esta aplicación fue desarrollada con JavaScript, en el marco del framework NodeJS.
