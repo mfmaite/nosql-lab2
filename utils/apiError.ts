@@ -45,6 +45,10 @@ export const errors: Record<string, ErrorData> = {
     status: 500,
     description: "Error al consultar la CI",
   },
+  ERROR_CONSULTA_REGISTROS: {
+    status: 500,
+    description: "Error al consultar registros",
+  },
   ERROR_GET_PACIENTE: {
     status: 500,
     description: "Error al obtener paciente",
