@@ -23,11 +23,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/pacientes/",
+					"raw": "{{url}}:{{port}}/pacientes/",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"pacientes",
 						""
@@ -275,11 +275,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/registro",
+					"raw": "{{url}}:{{port}}/registro",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"registro"
 					]
@@ -334,11 +334,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/historia?ci=999999&&page=1",
+					"raw": "{{url}}:{{port}}/historia?ci=999999&&page=1",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"historia"
 					],
@@ -401,11 +401,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/historia?ci=99999111111&&page=1",
+					"raw": "{{url}}:{{port}}/historia?ci=99999111111&&page=1",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"historia"
 					],
@@ -434,8 +434,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"const code = 402",
-							"const msg = \"No existe un paciente con esta cedula\"",
+							"const code = 500",
+							"const msg = \"Error al consultar la CI\"",
 							"pm.test(\"Status code esperado -- \" + code.toString() , function () {",
 							"    pm.response.to.have.status(code);",
 							"});",
@@ -478,11 +478,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/historia?ci=&&page=1",
+					"raw": "{{url}}:{{port}}/historia?ci=&&page=1",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"historia"
 					],
@@ -558,11 +558,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/historia?i=3&&page=1",
+					"raw": "{{url}}:{{port}}/historia?i=3&&page=1",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"historia"
 					],
@@ -611,11 +611,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/pacientes/999999",
+					"raw": "{{url}}:{{port}}/pacientes/999999",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"pacientes",
 						"999999"
@@ -654,11 +654,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/pacientes/",
+					"raw": "{{url}}:{{port}}/pacientes/",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"pacientes",
 						""
@@ -704,11 +704,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/pacientes/",
+					"raw": "{{url}}:{{port}}/pacientes/",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"pacientes",
 						""
@@ -748,11 +748,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/pacientes/",
+					"raw": "{{url}}:{{port}}/pacientes/",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"pacientes",
 						""
@@ -807,11 +807,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/pacientes/",
+					"raw": "{{url}}:{{port}}/pacientes/",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"pacientes",
 						""
@@ -857,11 +857,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/pacientes/",
+					"raw": "{{url}}:{{port}}/pacientes/",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"pacientes",
 						""
@@ -897,11 +897,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/pacientes/999999",
+					"raw": "{{url}}:{{port}}/pacientes/999999",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"pacientes",
 						"999999"
@@ -925,11 +925,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/pacientes/",
+					"raw": "{{url}}:{{port}}/pacientes/",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"pacientes",
 						""
@@ -1180,11 +1180,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/registro",
+					"raw": "{{url}}:{{port}}/registro",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"registro"
 					]
@@ -1442,11 +1442,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/registro",
+					"raw": "{{url}}:{{port}}/registro",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"registro"
 					]
@@ -1711,11 +1711,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/registro",
+					"raw": "{{url}}:{{port}}/registro",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"registro"
 					]
@@ -1981,11 +1981,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/registro",
+					"raw": "{{url}}:{{port}}/registro",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"registro"
 					]
@@ -2242,11 +2242,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/registro",
+					"raw": "{{url}}:{{port}}/registro",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"registro"
 					]
@@ -2281,11 +2281,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/pacientes/999999",
+					"raw": "{{url}}:{{port}}/pacientes/999999",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"pacientes",
 						"999999"
@@ -2293,6 +2293,40 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"key": "port",
+			"value": "3000",
+			"type": "string"
 		}
 	]
 }

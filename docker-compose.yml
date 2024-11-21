@@ -1,10 +1,37 @@
 version: "3.7"
 services:
- api:
-  build:
-   context: .
-   target: production
-  ports:
-   - 3000:3000
-  env_file:
+  api:
+    build:
+      context: .
+      target: production
+    volumes:
+      - shared-postman:/app/postman-collections  # Monta el volumen en la carpeta de las colecciones
+    ports:
+      - 3000:3000
+    env_file:
       - .env
+    networks:
+      - app-network  # Conecta a la red personalizada
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    user: root
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - nosql-lab2_jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - shared-postman:/app/postman-collections  # Monta el mismo volumen en Jenkins
+    environment:
+      - JENKINS_OPTS=--prefix=/jenkins
+    command: /bin/bash -c "apt-get update && apt-get install -y npm && npm install -g newman && /usr/local/bin/jenkins.sh"  # Aquí corregí la ruta a jenkins.sh
+    networks:
+      - app-network  # Conecta a la red personalizada
+
+networks:
+  app-network:  # Define la red personalizada para permitir la comunicación entre contenedores
+
+volumes:
+  nosql-lab2_jenkins_home:
+  shared-postman:
