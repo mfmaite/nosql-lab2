@@ -1,11 +1,11 @@
 import { ApiError, errors } from '../utils/index.js';
 import { ciAlreadyExists, getHistoriaPaciente } from '../services/index.js';
 
-async function consultarHistoria({ ci }: { ci: string }) {
+async function consultarHistoria({ ci, page }: { ci: string, page?: number }) {
   try {
     const existsCi = await ciAlreadyExists(ci);
     if (!existsCi) throw new ApiError(errors.CI_NOT_FOUND);
-    return getHistoriaPaciente(ci);
+    return getHistoriaPaciente({ ci, page });
 
   } catch (error) {
     const err = error as ApiError;

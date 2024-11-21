@@ -1,7 +1,7 @@
 import { Paciente } from '../types/paciente.js';
 import { ApiError, errors } from '../utils/index.js';
 import { crearRegistroData } from '../schema/registro.schema.js';
-import { ciAlreadyExists, createPatient, createPatientRegistry } from '../services/index.js';
+import { ciAlreadyExists, createPatient, createPatientRegistry, deletePatient } from '../services/index.js';
 
 async function crearPaciente(paciente: Paciente) {
   try {
@@ -40,4 +40,21 @@ async function crearRegistroPaciente(registro: crearRegistroData) {
   }
 }
 
-export { crearPaciente, crearRegistroPaciente };
+async function eliminarPaciente(ci: string){
+  try {
+    const existsCi = await ciAlreadyExists(ci);
+    if (!existsCi) throw new ApiError(errors.CI_NOT_FOUND);
+    return deletePatient(ci);
+  } catch (error) {
+    const err = error as ApiError;
+
+    return {
+      data: {
+        error: err.message || 'Error interno del servidor',
+      },
+      status: err.status || 500,
+    };
+  }
+}
+
+export { crearPaciente, crearRegistroPaciente, eliminarPaciente };

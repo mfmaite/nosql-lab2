@@ -1,21 +1,25 @@
-import firebaseClient from '../config/firebase.js';
-import BD_REFERENCES from '../networking/references.js';
-import { ApiError, errors, orderByDate } from '../utils/index.js';
-import { ref, get, query, orderByChild, equalTo } from 'firebase/database';
+import { ApiError, errors } from '../utils/index.js';
+import { getPatientId, getRegistros } from './pacientes.js';
 
-async function getHistoriaPaciente(ci: string) {
+async function getHistoriaPaciente({
+  ci,
+  limit = 5,
+  page = 1,
+}: {
+  ci: string;
+  limit?: number;
+  page?: number;
+}) {
   try {
-    const registrosRef = ref(firebaseClient, BD_REFERENCES.registro);
-    const q = query(registrosRef, equalTo(ci), orderByChild('ci'))
-    const snapshot = await get(q);
-    // TODO Add pagination
+    const pacienteId = await getPatientId(ci);
+    const registros = await getRegistros(pacienteId, page, limit);
 
     return {
       status: 200,
-      data: snapshot.exists() ? orderByDate(snapshot.val()) : 'No existen registros para el usuario con cédula ' + ci,
+      data: registros ? registros : 'No existen registros para el usuario con cédula ' + ci,
     };
   } catch (error) {
-    console.error('Error al consultar si el ci ya existe:', error);
+    console.error('Error al consultar la historia del paciente', error);
     throw new ApiError(errors.ERROR_CONSULTA_CI)
   }
 }

@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx newman run ./postman-collections/Tests.postman_collection.json",
     "build": "rimraf ./dist && tsc",
     "start": "npm run build && node dist/index.js",
     "dev": "nodemon -I --exec node --experimental-specifier-resolution=node  --loader ts-node/esm ./index.ts",
@@ -21,6 +21,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "firebase": "^11.0.1",
+    "newman": "^6.2.1",
     "yup": "^1.4.0"
   },
   "devDependencies": {
