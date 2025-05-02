@@ -6,9 +6,9 @@ través de servicios REST, y cuyos datos sean almacenados y extraídos de una ba
 de datos NoSQL.
 
 ##### Participantes
-* Maité Martínez (ci.: 5.142.074-8)
-* Leonardo Vieras (ci.: 4.513.941-8)
-* Federico Vigliarolo (ci.: 5.065.179-4)
+* Maité Martínez 
+* Leonardo Vieras 
+* Federico Vigliarolo 
 
 ## Tabla de Contenidos
 - [Getting Started](#getting-started)
